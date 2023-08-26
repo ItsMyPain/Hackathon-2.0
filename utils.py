@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 
 import jwt
+import openai
 import requests
 from flask import current_app
 
@@ -51,3 +52,25 @@ def translate(texts: str, from_lang: str, to_lang: str):
                              )
 
     return response.json()['translations'][0]['text']
+
+
+def predict(text: str):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": text
+            },
+            # {
+            #     "role": "user",
+            #     "content": text
+            # },
+        ],
+        temperature=1,
+        max_tokens=100,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+    )
+    return response.choices[0].message.content
