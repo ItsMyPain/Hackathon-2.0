@@ -1,20 +1,20 @@
-import os
-
 from dotenv import load_dotenv
 from flask import Flask, render_template
 
 from forms import MainForm
-from utils import translate
+from utils import translate, update_iamtoken
 
 load_dotenv()
 app = Flask("elf")
 
 app.config.from_pyfile("config.py")
-print(app.config)
+with app.app_context():
+    update_iamtoken()
 
 
 @app.get("/")
 def main_get():
+    update_iamtoken()
     form = MainForm()
     return render_template("main.html", form=form)
 
@@ -26,6 +26,7 @@ def main_post():
     print(form.data)
     if form.validate():
         data = translate(form.text.data, 'ru', 'en')
+        data = translate(data, 'en', 'ru')
 
     return render_template("main.html", form=form, data=data)
 
