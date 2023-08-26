@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Эльф Лесной</title>
+</head>
+<body>
+<form method="post">
+    {{ form.csrf_token }}
+    {% if form.csrf_token.errors %}
+    <span class="field-error">You have submitted an invalid CSRF token</span>
+    {% endif %}
+    {{ form.text.label }}
+    {{ form.text() }}
+    {% if form.text.errors -%}
+    <span class="field-error">{{ form.text.errors[0] }}</span>
+    {%- endif %}
+    {{ form.submit() }}
+    <p>{{ data }}</p>
+</form>
+</body>
+</html>
