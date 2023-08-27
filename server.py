@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from transformers import pipeline
 
 from forms import MainForm
-from utils import translate, update_iamtoken, predict_yandex
+from utils import translate, update_iamtoken, predict_yandex, summarize
 
 app = Flask("elf")
 
@@ -12,7 +12,7 @@ with app.app_context():
     update_iamtoken(1)
     update_iamtoken(2)
     openai.api_key = app.config["OPENAI_API_KEY"]
-    # app.app_ctx_globals_class.summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+    app.app_ctx_globals_class.summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 
 @app.get("/")
@@ -29,8 +29,13 @@ def main_post():
     data = ''
     if form.validate():
         data = translate(form.text.data, 'ru', 'en')
+        print('После перевода', data)
+        data = summarize(data)
+        print('После суммаризатора', data)
         data = translate(data, 'en', 'ru')
+        print('После обратного перевода', data)
         data = predict_yandex('', data)
+        print('После яндекса', data)
 
     return render_template("main.html", form=form, data=data)
 
