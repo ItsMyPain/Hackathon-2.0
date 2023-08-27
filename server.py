@@ -31,5 +31,9 @@ def main_post():
     return render_template("main.html", form=form, data=data)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.get('/base')
+def base():
+    return render_template("main_page.html")
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
