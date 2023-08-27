@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Эльф Лесной</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block title %}
+<title>Главная</title>
+{% endblock %}
+
+{% block content %}
+<div class="main">
+    <div class="left-content">
+        <h1>Главная</h1>
+    </div>
+    <div class="right-content">
+        <h1>Главная</h1>
+    </div>
+</div>
 <form method="post">
     {{ form.csrf_token }}
     {% if form.csrf_token.errors %}
@@ -18,5 +29,4 @@
     {{ form.submit() }}
     <p>{{ data }}</p>
 </form>
-</body>
-</html>
+{% endblock %}

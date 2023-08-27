@@ -11,7 +11,7 @@ pip install -r .\requirements.txt
 [Development](http://127.0.0.1:5000)
 
 ```
-python3 server.py
+flask --app server:app run --debug
 ```
 
 [Production](http://127.0.0.1:8080)

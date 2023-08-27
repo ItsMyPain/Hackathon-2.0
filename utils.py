@@ -8,33 +8,37 @@ import requests
 from flask import current_app
 
 
-def update_iamtoken():
-    iamtoken_exp = current_app.config.get('iamtoken_exp', datetime(2000, 1, 1))
+def update_iamtoken(num: int):
+    iamtoken_exp = current_app.config.get(f'iamtoken_exp{num}', datetime(2000, 1, 1))
     if iamtoken_exp < datetime.now():
         now = int(time.time())
         payload = {
             'aud': 'https://iam.api.cloud.yandex.net/iam/v1/tokens',
-            'iss': current_app.config.get('SERVICE_ACC_ID'),
+            'iss': current_app.config.get(f'SERVICE_ACC_ID{num}'),
             'iat': now,
             'exp': now + 360}
         encoded_token = jwt.encode(
             payload,
-            current_app.config.get('PRIVATE_KEY'),
+            current_app.config.get(f'PRIVATE_KEY{num}'),
             algorithm='PS256',
-            headers={'kid': current_app.config.get('PUBLIC_KEY_ID')})
+            headers={'kid': current_app.config.get(f'PUBLIC_KEY_ID{num}')})
         response = requests.request("POST",
                                     "https://iam.api.cloud.yandex.net/iam/v1/tokens",
                                     headers={'Content-Type': 'application/json'},
                                     data=json.dumps({"jwt": encoded_token}))
+
+        if response.status_code != 200:
+            raise Exception(response.text)
+
         data = response.json()
-        current_app.config['iamtoken'] = data['iamToken']
-        current_app.config['iamtoken_exp'] = datetime.strptime(data['expiresAt'][:19], '%Y-%m-%dT%H:%M:%S')
+        current_app.config[f'iamtoken{num}'] = data['iamToken']
+        current_app.config[f'iamtoken_exp{num}'] = datetime.strptime(data['expiresAt'][:19], '%Y-%m-%dT%H:%M:%S')
 
-        print('Запрошен токен')
+        print(f'Запрошен токен {num}')
 
 
-def translate(texts: str, from_lang: str, to_lang: str):
-    update_iamtoken()
+def translate(texts: str, from_lang: str, to_lang: str) -> str:
+    update_iamtoken(1)
     body = {
         "sourceLanguageCode": from_lang,
         "targetLanguageCode": to_lang,
@@ -44,17 +48,54 @@ def translate(texts: str, from_lang: str, to_lang: str):
     }
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer {0}".format(current_app.config['iamtoken'])
+        "Authorization": f"Bearer {current_app.config['iamtoken1']}"
     }
-    response = requests.post('https://translate.api.cloud.yandex.net/translate/v2/translate',
+    response = requests.post("https://translate.api.cloud.yandex.net/translate/v2/translate",
                              json=body,
                              headers=headers
                              )
+    if response.status_code != 200:
+        raise Exception(response.text)
 
     return response.json()['translations'][0]['text']
 
 
-def predict(text: str):
+def predict_yandex(instruction_text: str, request_text: str) -> str:
+    update_iamtoken(2)
+    body = {
+        "model": "general",
+        "instructionText": instruction_text,
+        "requestText": request_text,
+        "generationOptions": {
+            "maxTokens": 300,
+            "temperature": 0.6
+        }
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {current_app.config['iamtoken2']}"
+    }
+    response = requests.post("https://llm.api.cloud.yandex.net/llm/v1alpha/instruct",
+                             json=body,
+                             headers=headers
+                             )
+    if response.status_code != 200:
+        raise Exception(response.text)
+
+    return response.json()['result']['alternatives'][0]['text']
+
+
+def summarize(text: str) -> str:
+    mean_len = 10
+    max_len = 130
+    if len(text.split()) < mean_len:
+        return text
+    else:
+        return current_app.app_ctx_globals_class \
+            .summarizer(text, max_length=max_len, min_length=mean_len, do_sample=False)[0]['summary_text']
+
+
+def predict_openai(text: str) -> str:
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
