@@ -5,7 +5,7 @@
 
 .main-top-text {
     color: rgba(0, 0, 0, 0.60);
-    font-family: Ubuntu, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 700;
@@ -14,7 +14,7 @@
 
 .main-center-text {
     color: #000;
-    font-family: Ubuntu, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 56px;
     font-style: normal;
     font-weight: 700;
@@ -23,7 +23,7 @@
 
 .main-bottom-text {
     color: #000;
-    font-family: Ubuntu, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -54,8 +54,22 @@
 .main-btn {
     width: 174px;
     margin: 15px 0 0 95px;
-    font-family: Ubuntu, sans-serif;;
+    font-family: Inter, sans-serif;
     font-size: 16px;
     font-weight: 600;
 }
 
+.main-wiki {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.wiki-text {
+    font-family: Inter, sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 25px;
+    letter-spacing: 0;
+    text-align: left;
+}

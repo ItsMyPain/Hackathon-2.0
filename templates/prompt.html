@@ -9,50 +9,56 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col flex-col">
-        <div class="top-text">Как использовать промптинг-генератор?</div>
-        <div class="center-text">
-            Чтобы воспользоваться промптинг-генератором, сформулируйте свой запрос в текстовом окне
-            <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
-                 xmlns="http://www.w3.org/2000/svg" style="height: 24px;width: 24px;">
-                <path d="m9.001 13.022h-3.251c-.412 0-.75.335-.75.752 0 .188.071.375.206.518 1.685 1.775 4.692 4.945 6.069 6.396.189.2.452.312.725.312.274 0 .536-.112.725-.312 1.377-1.451 4.385-4.621 6.068-6.396.136-.143.207-.33.207-.518 0-.417-.337-.752-.75-.752h-3.251v-9.02c0-.531-.47-1.002-1-1.002h-3.998c-.53 0-1 .471-1 1.002zm4.498-8.522v10.022h3.008l-4.507 4.751-4.507-4.751h3.008v-10.022z"
-                      fill-rule="nonzero"/>
-            </svg>
+<form method="post">
+    <div class="row">
+        <div class="col flex-col">
+            <div class="top-text">Как использовать промптинг-генератор?</div>
+            <div class="center-text">
+                Чтобы воспользоваться промптинг-генератором, сформулируйте свой запрос в текстовом окне
+                <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"
+                     xmlns="http://www.w3.org/2000/svg" style="height: 24px;width: 24px;">
+                    <path d="m9.001 13.022h-3.251c-.412 0-.75.335-.75.752 0 .188.071.375.206.518 1.685 1.775 4.692 4.945 6.069 6.396.189.2.452.312.725.312.274 0 .536-.112.725-.312 1.377-1.451 4.385-4.621 6.068-6.396.136-.143.207-.33.207-.518 0-.417-.337-.752-.75-.752h-3.251v-9.02c0-.531-.47-1.002-1-1.002h-3.998c-.53 0-1 .471-1 1.002zm4.498-8.522v10.022h3.008l-4.507 4.751-4.507-4.751h3.008v-10.022z"
+                          fill-rule="nonzero"/>
+                </svg>
+            </div>
+            <div class="input-form">
+                {{ form.csrf_token }}
+                {% if form.csrf_token.errors %}
+                <span class="field-error">You have submitted an invalid CSRF token</span>
+                {% endif %}
+                {{ form.text(class="prompt-input") }}
+                {% if form.text.errors -%}
+                <span class="field-error">{{ form.text.errors[0] }}</span>
+                {%- endif %}
+                {{ form.submit(class="btn btn-primary prompt-button") }}
+            </div>
         </div>
-        <form method="post" class="input-form">
-            {{ form.csrf_token }}
-            {% if form.csrf_token.errors %}
-            <span class="field-error">You have submitted an invalid CSRF token</span>
-            {% endif %}
-            {{ form.text(class="prompt-input") }}
-            {% if form.text.errors -%}
-            <span class="field-error">{{ form.text.errors[0] }}</span>
-            {%- endif %}
-            {{ form.submit(class="btn btn-primary prompt-button") }}
-        </form>
+        <div class="col flex-col">
+            <div class="top-text">Что вы получили?</div>
+            <div class="center-text">
+                В окне ниже расположен запрос, который вы можете передавать нейросети
+            </div>
+            <div style="position:relative; width: min-content;display: flex;flex-direction: column;align-items: center;"
+                 id="prompt-block">
+                <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" height="24"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="copy-button" onclick="copyText()">
+                    <path d="m6 18h-3c-.48 0-1-.379-1-1v-14c0-.481.38-1 1-1h14c.621 0 1 .522 1 1v3h3c.621 0 1 .522 1 1v14c0 .621-.522 1-1 1h-14c-.48 0-1-.379-1-1zm1.5-10.5v13h13v-13zm9-1.5v-2.5h-13v13h2.5v-9.5c0-.481.38-1 1-1z"
+                          fill-rule="nonzero"/>
+                </svg>
+                {{ form.output_text(class="prompt-input", id="prompt-output") }}
+                <svg id="need-to-delete" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round"
+                     stroke-miterlimit="2" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                     class="copy-button">
+                    <path d="m6 18v3c0 .621.52 1 1 1h14c.478 0 1-.379 1-1v-14c0-.478-.379-1-1-1h-3v-3c0-.478-.379-1-1-1h-14c-.62 0-1 .519-1 1v14c0 .621.52 1 1 1zm10.5-12h-9.5c-.62 0-1 .519-1 1v9.5h-2.5v-13h13z"
+                          fill-rule="nonzero"/>
+                </svg>
+                {% if form.output_text.data %}
+                {{ form.send(class="btn btn-primary prompt-button", style="width: auto;") }}
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="col flex-col">
-        <div class="top-text">Что вы получили?</div>
-        <div class="center-text">
-            В окне ниже расположен запрос, который вы можете передавать нейросети
-        </div>
-        <div style="position:relative;" id="prompt-block">
-            <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" height="24"
-                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="copy-button" onclick="copyText()">
-                <path d="m6 18h-3c-.48 0-1-.379-1-1v-14c0-.481.38-1 1-1h14c.621 0 1 .522 1 1v3h3c.621 0 1 .522 1 1v14c0 .621-.522 1-1 1h-14c-.48 0-1-.379-1-1zm1.5-10.5v13h13v-13zm9-1.5v-2.5h-13v13h2.5v-9.5c0-.481.38-1 1-1z"
-                      fill-rule="nonzero"/>
-            </svg>
-            <textarea class="prompt-input" id="prompt-output" disabled>{{ data }}</textarea>
-            <svg id="need-to-delete" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round"
-                 stroke-miterlimit="2" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-                 class="copy-button">
-                <path d="m6 18v3c0 .621.52 1 1 1h14c.478 0 1-.379 1-1v-14c0-.478-.379-1-1-1h-3v-3c0-.478-.379-1-1-1h-14c-.62 0-1 .519-1 1v14c0 .621.52 1 1 1zm10.5-12h-9.5c-.62 0-1 .519-1 1v9.5h-2.5v-13h13z"
-                      fill-rule="nonzero"/>
-            </svg>
-        </div>
-    </div>
-</div>
+</form>
 <script>
     const del = document.getElementById('need-to-delete');
     del.remove();

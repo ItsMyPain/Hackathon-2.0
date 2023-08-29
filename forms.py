@@ -5,4 +5,6 @@ from wtforms.validators import DataRequired
 
 class MainForm(FlaskForm):
     text = TextAreaField('Запрос', validators=[DataRequired()])
+    output_text = TextAreaField('Выход')
     submit = SubmitField('Запромптить')
+    send = SubmitField('Отправить в YandexGPT')

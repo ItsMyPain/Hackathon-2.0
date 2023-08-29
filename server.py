@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 from transformers import pipeline
 
 from forms import MainForm
-from utils import translate, update_iamtoken, predict_yandex, summarize, additional_text
+from utils import update_iamtoken, predict_yandex, summarize, additional_text
 
 app = Flask("elf")
 
@@ -18,7 +18,7 @@ menu = {
     "/": "О нас",
     "/wiki": "Что такое промпт?",
     "/prompt": "Запромптить",
-    "/contacts": "Контакты",
+    # "/contacts": "Контакты",
 }
 
 
@@ -39,15 +39,21 @@ def prompt_get():
 def prompt_post():
     form = MainForm()
     data = ''
-    if form.validate():
+    if form.validate() and form.submit.data:
         print('ЗАПРОС:', form.text.data)
         data = summarize(form.text.data)
         data = additional_text(data)
         print()
         print('После добавления текста:', data)
-        data = predict_yandex('', data)
+        data = predict_yandex(data, True)
         print()
         print('После яндекса:', data)
+        form.output_text.data = data
+
+    elif form.send.data:
+        print(form.data)
+        data = predict_yandex(form.output_text.data, False)
+        form.output_text.data = data
 
     return render_template("prompt.html", form=form, data=data, menu=menu, page=request.url_rule)
 
