@@ -67,8 +67,8 @@ def predict_yandex(instruction_text: str, request_text: str) -> str:
         "instructionText": instruction_text,
         "requestText": request_text,
         "generationOptions": {
-            "maxTokens": 300,
-            "temperature": 0.6
+            "maxTokens": 400,
+            "temperature": 0.4
         }
     }
     headers = {
@@ -93,6 +93,12 @@ def summarize(text: str) -> str:
     else:
         return current_app.app_ctx_globals_class \
             .summarizer(text, max_length=max_len, min_length=mean_len, do_sample=False)[0]['summary_text']
+
+
+def additional_text(text: str):
+    return f"""Напиши исправленный и дополненный вопрос для лучшего понимания задания. 
+Исправленный запрос должен содержать контекст исходного запроса, роль респондента (например, эксперта в какой-либо области, аналитика, программиста и так далее), 
+так же исправленный запрос должен содержать дополнения (например, план выполнения запроса) и передавать весь смысл исходного запроса: '{text}'"""
 
 
 def predict_openai(text: str) -> str:

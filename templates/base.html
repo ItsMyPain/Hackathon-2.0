@@ -13,11 +13,12 @@
     {% endblock %}
     <style>
         :root {
-            --header-backgroung: #5f67b2;
-            --header-text: #FFFFFF;
+            --header-backgroung: #001F7D;;
+            --header-text: #DBEBF2;
+            --header-text-hover: #76B7D4;
 
-            --content-backgroung: #adafea;
-            --content-text: #FFFFFF;
+            --content-backgroung: #FFFFFF;
+            --content-text: #000000;
 
             --footer-backgroung: #6982b7;
             --footer-text: #bcdecd;
@@ -30,8 +31,8 @@
         crossorigin="anonymous"></script>
 <nav class="navbar navbar-expand-lg" style="background-color: var(--header-backgroung);">
     <div class="container-fluid" style="gap: 100px;">
-        <a class="navbar-brand" href="/">
-            <img src="/static/logo.png" alt="Logo" height="30">
+        <a class="navbar-brand" href="/" style="margin: 15px 0 0 100px;">
+            <img src="/static/logo.png" alt="Logo" height="84">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,18 +40,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav" style="gap: 0 40px;">
+                {% for url, title in menu.items() %}
+                {% if url == page.rule %}
                 <li class="nav-item ">
-                    <a class="nav-link header-link active" aria-current="page" href="/about">О нас</a>
+                    <a class="nav-link header-link link-active" href="{{ url }}">{{ title }}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link header-link" href="/wiki">Что такое промпт?</a>
+                {% else %}
+                <li class="nav-item ">
+                    <a class="nav-link header-link" href="{{ url }}">{{ title }}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link header-link" href="/">Запромптить</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link header-link" href="/contacts">Контакты</a>
-                </li>
+                {% endif %}
+                {% endfor %}
             </ul>
         </div>
     </div>

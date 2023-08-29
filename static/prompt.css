@@ -1,0 +1,35 @@
+.top-text {
+    color: rgba(0, 0, 0, 0.60);
+    font-family: "Segoe UI", serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.center-text {
+    color: #000;
+    font-family: "Segoe UI", serif;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    height: 60px;
+    width: 630px;
+}
+
+.prompt-input {
+    width: 637px;
+    height: 251px;
+    border-radius: 20px;
+    background: #C5D7F2;
+    border: none;
+    resize: none;
+    padding: 20px;
+}
+
+.flex-col {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+}

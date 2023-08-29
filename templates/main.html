@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<link rel="stylesheet" href="/static/main.css">
 {% endblock %}
 
 {% block title %}
@@ -8,25 +9,34 @@
 {% endblock %}
 
 {% block content %}
-<div class="main">
-    <div class="left-content">
-        <h1>Главная</h1>
+<div class="row">
+    <div class="col main-text-container">
+        <div class="main-top-text">Промптинг-сервис</div>
+        <div class="main-center-text">
+            Отраслевой промпт-генератор <br>
+            <span style="color: #136CF2;">для организаций</span>
+            <span style="color: #18D6B4;">финансового</span>
+            <span style="color: #136CF2;">сектора</span>
+        </div>
+        <div class="main-bottom-text">Мы помогаем людям общаться с нейросетями</div>
     </div>
-    <div class="right-content">
-        <h1>Главная</h1>
+    <div class="col main-img-container">
+        <img src="/static/main.svg" alt="main" height="460">
+        <!--        <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" class="main-ellipse">-->
+        <!--            <ellipse cx="20" cy="50" rx="10" ry="10" class="ellipse"></ellipse>-->
+        <!--        </svg>-->
     </div>
 </div>
-<form method="post">
-    {{ form.csrf_token }}
-    {% if form.csrf_token.errors %}
-    <span class="field-error">You have submitted an invalid CSRF token</span>
-    {% endif %}
-    {{ form.text.label }}
-    {{ form.text() }}
-    {% if form.text.errors -%}
-    <span class="field-error">{{ form.text.errors[0] }}</span>
-    {%- endif %}
-    {{ form.submit() }}
-    <p>{{ data }}</p>
-</form>
+<div class="row">
+    <a type="button" class="btn btn-primary main-btn" href="/prompt">
+        Запромптить
+        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"
+             style="rotate: -45deg;fill: white;margin-left: 10px;">
+            <path d="M21.883 12l-7.527 6.235.644.765 9-7.521-9-7.479-.645.764 7.529 6.236h-21.884v1h21.883z"/>
+        </svg>
+    </a>
+    <!--    <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" class="main-ellipse">-->
+    <!--        <ellipse cx="20" cy="50" rx="10" ry="10" class="ellipse"></ellipse>-->
+    <!--    </svg>-->
+</div>
 {% endblock %}

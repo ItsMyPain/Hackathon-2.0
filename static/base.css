@@ -18,21 +18,37 @@ header {
     height: inherit;
 }
 
-header .menu {
+.menu {
     display: flex;
     gap: 60px;
     flex-direction: row;
     align-items: center;
 }
 
+
 .header-link {
     color: var(--header-text);
+    font-family: Ubuntu, sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 16px;
+}
+
+.header-link:hover {
+    color: var(--header-text-hover);
+}
+
+.link-active {
+    color: var(--header-text-hover);
 }
 
 .content {
     min-height: calc(100vh - 200px);
     background: var(--content-backgroung);
     color: var(--content-text);
+    overflow: hidden;
+    padding: 40px;
 }
 
 footer {
