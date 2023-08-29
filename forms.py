@@ -5,4 +5,4 @@ from wtforms.validators import DataRequired
 
 class MainForm(FlaskForm):
     text = TextAreaField('Запрос', validators=[DataRequired()])
-    submit = SubmitField('Преобразовать')
+    submit = SubmitField('Запромптить')

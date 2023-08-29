@@ -29,13 +29,13 @@
             {% if form.text.errors -%}
             <span class="field-error">{{ form.text.errors[0] }}</span>
             {%- endif %}
-            {{ form.submit() }}
+            {{ form.submit(class="btn btn-primary main-btn") }}
         </form>
     </div>
     <div class="col flex-col">
         <div class="top-text">Что вы получили?</div>
         <div class="center-text">
-            В окне ниже запрос, который вы можете передавать нейросети
+            В окне ниже расположен запрос, который вы можете передавать нейросети
         </div>
         <textarea class="prompt-input" disabled>{{ data }}</textarea>
     </div>

@@ -13,7 +13,6 @@ with app.app_context():
     update_iamtoken(2)
     openai.api_key = app.config["OPENAI_API_KEY"]
     app.app_ctx_globals_class.summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-
 menu = {
     "/about": "О нас",
     "/wiki": "Что такое промпт?",

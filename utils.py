@@ -65,10 +65,10 @@ def predict_yandex(instruction_text: str, request_text: str) -> str:
     update_iamtoken(2)
     body = {
         "model": "general",
-        "instructionText": "Ты занимаешься подготовкой и переформулировкой запроса из финансовой области для нейросети, не отвечая на на них. Ограничься 10 предложениями.",
+        "instructionText": "Ты занимаешься подготовкой и переформулировкой запроса из финансовой области для нейросети, не отвечая на него. Ограничься 10 предложениями.",
         "requestText": request_text,
         "generationOptions": {
-            "maxTokens": 400,
+            "maxTokens": 500,
             "temperature": 0.01
         }
     }
@@ -96,7 +96,7 @@ def summarize(text: str) -> str:
         print()
         print('После перевода:', data)
         data = current_app.app_ctx_globals_class \
-            .summarizer(text, max_length=max_len, min_length=mean_len, do_sample=False)[0]['summary_text']
+            .summarizer(data, max_length=max_len, min_length=mean_len, do_sample=False)[0]['summary_text']
         print()
         print('После суммаризатора:', data)
         data = translate(data, 'en', 'ru')
@@ -108,7 +108,7 @@ def summarize(text: str) -> str:
 def additional_text(text: str):
     return f"""Напиши исправленный и дополненный вопрос для лучшего понимания запроса нейросетью. 
 Исправленный запрос должен содержать контекст исходного запроса, роль респондента (например, эксперта в какой-либо области, аналитика, программиста и так далее), 
-так же исправленный запрос должен содержать дополнения (например, набор более простых запросов к нейросети ) и передавать весь смысл исходного запроса: '{text}'"""
+так же исправленный запрос должен содержать дополнения (например, набор более простых различающихся запросов к нейросети ) и передавать весь смысл исходного запроса: '{text}'"""
 
 
 def predict_openai(text: str) -> str:
