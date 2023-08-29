@@ -41,15 +41,7 @@ def prompt_post():
     data = ''
     if form.validate():
         print('ЗАПРОС:', form.text.data)
-        data = translate(form.text.data, 'ru', 'en')
-        print()
-        print('После перевода:', data)
-        data = summarize(data)
-        print()
-        print('После суммаризатора:', data)
-        data = translate(data, 'en', 'ru')
-        print()
-        print('После обратного перевода:', data)
+        data = summarize(form.text.data)
         data = additional_text(data)
         print()
         print('После добавления текста:', data)

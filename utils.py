@@ -1,6 +1,7 @@
 import json
 import time
 from datetime import datetime
+from typing import Tuple
 
 import jwt
 import openai
@@ -64,11 +65,11 @@ def predict_yandex(instruction_text: str, request_text: str) -> str:
     update_iamtoken(2)
     body = {
         "model": "general",
-        "instructionText": instruction_text,
+        "instructionText": "Ты занимаешься подготовкой и переформулировкой запроса из финансовой области для нейросети, не отвечая на на них. Ограничься 10 предложениями.",
         "requestText": request_text,
         "generationOptions": {
             "maxTokens": 400,
-            "temperature": 0.4
+            "temperature": 0.01
         }
     }
     headers = {
@@ -91,14 +92,23 @@ def summarize(text: str) -> str:
     if len(text.split()) < mean_len:
         return text
     else:
-        return current_app.app_ctx_globals_class \
+        data = translate(text, 'ru', 'en')
+        print()
+        print('После перевода:', data)
+        data = current_app.app_ctx_globals_class \
             .summarizer(text, max_length=max_len, min_length=mean_len, do_sample=False)[0]['summary_text']
+        print()
+        print('После суммаризатора:', data)
+        data = translate(data, 'en', 'ru')
+        print()
+        print('После обратного перевода:', data)
+        return data
 
 
 def additional_text(text: str):
-    return f"""Напиши исправленный и дополненный вопрос для лучшего понимания задания. 
+    return f"""Напиши исправленный и дополненный вопрос для лучшего понимания запроса нейросетью. 
 Исправленный запрос должен содержать контекст исходного запроса, роль респондента (например, эксперта в какой-либо области, аналитика, программиста и так далее), 
-так же исправленный запрос должен содержать дополнения (например, план выполнения запроса) и передавать весь смысл исходного запроса: '{text}'"""
+так же исправленный запрос должен содержать дополнения (например, набор более простых запросов к нейросети ) и передавать весь смысл исходного запроса: '{text}'"""
 
 
 def predict_openai(text: str) -> str:
