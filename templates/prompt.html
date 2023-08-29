@@ -20,7 +20,7 @@
                       fill-rule="nonzero"/>
             </svg>
         </div>
-        <form method="post">
+        <form method="post" class="input-form">
             {{ form.csrf_token }}
             {% if form.csrf_token.errors %}
             <span class="field-error">You have submitted an invalid CSRF token</span>
@@ -29,7 +29,7 @@
             {% if form.text.errors -%}
             <span class="field-error">{{ form.text.errors[0] }}</span>
             {%- endif %}
-            {{ form.submit(class="btn btn-primary main-btn") }}
+            {{ form.submit(class="btn btn-primary prompt-button") }}
         </form>
     </div>
     <div class="col flex-col">
@@ -37,9 +37,35 @@
         <div class="center-text">
             В окне ниже расположен запрос, который вы можете передавать нейросети
         </div>
-        <textarea class="prompt-input" disabled>{{ data }}</textarea>
+        <div style="position:relative;" id="prompt-block">
+            <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" height="24"
+                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="copy-button" onclick="copyText()">
+                <path d="m6 18h-3c-.48 0-1-.379-1-1v-14c0-.481.38-1 1-1h14c.621 0 1 .522 1 1v3h3c.621 0 1 .522 1 1v14c0 .621-.522 1-1 1h-14c-.48 0-1-.379-1-1zm1.5-10.5v13h13v-13zm9-1.5v-2.5h-13v13h2.5v-9.5c0-.481.38-1 1-1z"
+                      fill-rule="nonzero"/>
+            </svg>
+            <textarea class="prompt-input" id="prompt-output" disabled>{{ data }}</textarea>
+            <svg id="need-to-delete" clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round"
+                 stroke-miterlimit="2" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                 class="copy-button">
+                <path d="m6 18v3c0 .621.52 1 1 1h14c.478 0 1-.379 1-1v-14c0-.478-.379-1-1-1h-3v-3c0-.478-.379-1-1-1h-14c-.62 0-1 .519-1 1v14c0 .621.52 1 1 1zm10.5-12h-9.5c-.62 0-1 .519-1 1v9.5h-2.5v-13h13z"
+                      fill-rule="nonzero"/>
+            </svg>
+        </div>
     </div>
 </div>
+<script>
+    const del = document.getElementById('need-to-delete');
+    del.remove();
 
+    function copyText() {
+        const text = document.getElementById('prompt-output').value;
+        const block = document.getElementById('prompt-block');
 
+        navigator.clipboard.writeText(text);
+        block.appendChild(del);
+        window.setTimeout(function () {
+            del.remove();
+        }, 200);
+    }
+</script>
 {% endblock %}

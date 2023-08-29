@@ -13,8 +13,9 @@ with app.app_context():
     update_iamtoken(2)
     openai.api_key = app.config["OPENAI_API_KEY"]
     app.app_ctx_globals_class.summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
 menu = {
-    "/about": "О нас",
+    "/": "О нас",
     "/wiki": "Что такое промпт?",
     "/prompt": "Запромптить",
     "/contacts": "Контакты",
@@ -49,11 +50,6 @@ def prompt_post():
         print('После яндекса:', data)
 
     return render_template("prompt.html", form=form, data=data, menu=menu, page=request.url_rule)
-
-
-@app.get("/about")
-def about():
-    return render_template("about.html", menu=menu, page=request.url_rule)
 
 
 @app.get("/wiki")

@@ -26,7 +26,8 @@
     background: #C5D7F2;
     border: none;
     resize: none;
-    padding: 20px;
+    padding: 20px 30px;
+    margin: 0 0 40px 0;
 }
 
 .flex-col {
@@ -36,4 +37,26 @@
     justify-content: flex-start;
     align-content: center;
     flex-wrap: wrap;
+}
+
+.input-form {
+    width: min-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prompt-button {
+    width: 174px;
+    font-family: Ubuntu, sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.copy-button {
+    position: absolute;
+    left: 595px;
+    top: 13px;
+    z-index: 2;
+    cursor: pointer;
 }
